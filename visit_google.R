@@ -4,7 +4,20 @@ pacman::p_load("RSelenium",
               "rvest", 
               "magrittr")
 
-rD <- rsDriver(browser="phantomjs", port=4553L, chromever = NULL)
+
+# downloading in folder temp
+fprof <- makeFirefoxProfile(list(browser.helperApps.neverAsk.openFile = "text/csv",
+                                 browser.helperApps.neverAsk.saveToDisk = "text/csv"))
+
+# now add this to new list
+exCap <- list(firefox_profile = fprof$firefox_profile, 
+              "moz:firefoxOptions" = list(args = list('--headless')))
+
+# and use it here
+rD <- rsDriver(browser = "firefox", port = 4569L, chromever = NULL , extraCapabilities = exCap
+               )
+
+
 remDr <- rD[["client"]]
 
 # Navigate to webpage -----------------------------------------------------
