@@ -2,6 +2,7 @@ if(!require(pacman)){install.packages("pacman")}
 
 pacman::p_load("RSelenium",
               "rvest", 
+               "stringr",
               "magrittr")
 
 
@@ -22,19 +23,36 @@ remDr <- rD[["client"]]
 
 # Navigate to webpage -----------------------------------------------------
 #remDr$open()
-remDr$navigate("https://www.google.com/")
 
+# go to google's trending search page
+remDr$navigate("https://trends.google.com/trends/trendingsearches/daily?geo=US&hl=en-US")
 
-# click on I'm feeling lucky
-remDr$findElements("css", "#gbqfbb")[[1]]$clickElement()
-
-# figure out what we just clicked on lol
 # pull html
   page_html <- remDr$getPageSource()[[1]] %>% 
     read_html()
 
-# extract top title
-title <- page_html %>% 
-           html_nodes("h1.title")
+# extract date
+todays_date <- page_html |> 
+  html_elements("div.feed-list-wrapper:nth-child(1) > div:nth-child(1) > div:nth-child(1)") |>
+  html_text()
 
-print(title)
+
+# extract top search term
+search_term <- page_html |> 
+  html_elements("div.feed-list-wrapper:nth-child(1) > md-list:nth-child(2) > feed-item:nth-child(1) > ng-include:nth-child(1) > div:nth-child(1) .details-top a") |>
+  html_attr("title") |> 
+  str_remove("Explore ")
+
+
+# extract number of views
+search_count <- page_html |> 
+  html_elements("div.feed-list-wrapper:nth-child(1) > md-list:nth-child(2) > feed-item:nth-child(1) > ng-include:nth-child(1) > div:nth-child(1) .search-count-title") |>
+  html_text()
+
+
+
+msg <- paste0("The top trending search in English on google in the US on ", todays_date, " is ", search_term, " it has received ",
+              search_count, " searches.")
+
+
+print(msg)
