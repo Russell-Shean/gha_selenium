@@ -17,6 +17,21 @@ jobs:
       - name: Install R package linux dependencies
         run: sudo apt-get install libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev libudunits2-dev libgdal-dev
 
+
+        # source: https://gist.github.com/julionc/7476620
+      - name: Install phantomjs and its dependencies
+        run: |
+          sudo apt-get install build-essential chrpath libssl-dev libxft-dev
+          sudo apt-get install libfreetype6 libfreetype6-dev
+          sudo apt-get install libfontconfig1 libfontconfig1-dev
+          cd ~
+          export PHANTOM_JS="phantomjs-1.9.8-linux-x86_64"
+          wget https://bitbucket.org/ariya/phantomjs/downloads/$PHANTOM_JS.tar.bz2
+          sudo tar xvjf $PHANTOM_JS.tar.bz2
+          sudo mv $PHANTOM_JS /usr/local/share
+          sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
+          phantomjs --version
+
       - name: Check out repository
         uses: actions/checkout@v4
 
