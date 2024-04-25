@@ -21,8 +21,8 @@ rD <- rsDriver(browser = "firefox", port = 4569L, chromever = NULL , extraCapabi
 remDr <- rD[["client"]]
 
 # Navigate to webpage -----------------------------------------------------
-remDr$open()
-remDr$navigate()
+#remDr$open()
+remDr$navigate("https://www.google.com/)
 
 
 # click on I'm feeling lucky
