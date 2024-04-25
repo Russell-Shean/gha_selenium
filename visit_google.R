@@ -22,7 +22,7 @@ remDr <- rD[["client"]]
 
 # Navigate to webpage -----------------------------------------------------
 #remDr$open()
-remDr$navigate("https://www.google.com/)
+remDr$navigate("https://www.google.com/")
 
 
 # click on I'm feeling lucky
